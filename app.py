@@ -32,10 +32,11 @@ checkout['Departure','Duration'
 #.columns(['Date','Time','Departure','Arrival','Cost','Duration','IsWork'])
 #dt.date(2019,6,2)
 #print(str(dt.time(22,11,1)))
-cleaned = pd.DataFrame(columns=['Date','Time','Departure','Arrival','Cost','Duration','IsWork'])
+##cleaned = pd.DataFrame(columns=['Date','Time','Departure','Arrival','Cost','Duration','IsWork'])
 #cleaned
 
 #checkin[['Date','Check-in','Departure']]
 #cleaned.append(checkin['Date','Check-in','Departure'].rename({'Check-in':'Time'}))
-cleaned.append([checkin,checkout],ignore_index)
+#cleaned.append([checkin,checkout],ignore_index)
 #cleaned
+
