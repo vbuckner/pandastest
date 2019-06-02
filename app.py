@@ -40,3 +40,4 @@ checkout['Departure','Duration'
 #cleaned.append([checkin,checkout],ignore_index)
 #cleaned
 
+print('done')
