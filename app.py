@@ -15,24 +15,32 @@ try:
 except Exception as err:
     print('Problem with reading the file.<br/> '+err)
 
-checkin = df[df['Transaction']=='Check-in'].rename(columns={'Check-in':'Time'}).reset_index()
-checkin['Type','Arrival','Duration','Cost']=['Check-in','',0.,0.]
+
+checkin = df[df['Transaction']=='Check-in']
+checkin = checkin.rename(columns={'Check-in':'time','Date':'date','Departure':'departure'}).reset_index()
+checkin = checkin[['date','time','departure']]
+checkin['type']='checkin'
 #checkin.head(5)
 
 checkout = df[df['Transaction']=='Check-out']
-checkout = checkout[['Date','Check-out','Destination','Amount']].rename(columns={'Check-out':'Time','Amount':'Cost'}).reset_index()
-checkout['Type','Departure','Duration']=['Check-out','',0.]
+checkout = checkout.rename(columns={'Check-out':'time','Amount':'cost','Destination':'arrival','Date':'date'}).reset_index()
+checkout = checkout[['date','time','arrival','cost']]
+checkout['type']='checkout'
 #checkout.head(5)
 
-#cleaned = pd.Series([dt.date(2019,6,2),dt.time(22,7,0),'','',0.0,dt.time(0,0,0),'Y'])
-#from_dict(['Date','Time','Departure','Arrival','Cost','Duration','IsWork'])
-#.columns(['Date','Time','Departure','Arrival','Cost','Duration','IsWork'])
-#dt.date(2019,6,2)
-#print(str(dt.time(22,11,1)))
-cleaned = pd.DataFrame(columns=['Type','Date','Time','Departure','Arrival','Cost','Duration','IsWork'])
-#.astype('object','datetime64','datetime64','object','object','float_','float_','bool_')
+cleaned = pd.DataFrame(columns=['type','date','time','departure','arrival','cost','duration','iswork'])
 #cleaned
 
-cinout = checkin['Date','Time','Departure'].append(checkout['Date','Time','Arrival','Cost'])
-#cinout
+cleaned = pd.concat( [cleaned,checkin] , ignore_index=False, sort=False)
+#cleaned.head(5)
 
+cleaned.sort_values(by=['date','time'],ascending=[True,False],inplace=True)
+checkout.sort_values(by=['date','time'],ascending=[True,True],inplace=True)
+for i,r in checkout.iterrows():
+    print(i)
+    print(r)
+    print('r - date - '+r['date'])
+    print(cleaned.loc(['date']==r['date'] and ['time']<r['time']))
+    break
+#cleaned.head(4)
+#cleaned.loc(['date']==r['date'])
