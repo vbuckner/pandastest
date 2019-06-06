@@ -17,30 +17,34 @@ except Exception as err:
 
 
 checkin = df[df['Transaction']=='Check-in']
-checkin = checkin.rename(columns={'Check-in':'time','Date':'date','Departure':'departure'}).reset_index()
-checkin = checkin[['date','time','departure']]
-checkin['type']='checkin'
-#checkin.head(5)
+checkin = checkin.rename(columns={'Check-in':'dtime','Date':'date','Departure':'departure'}).reset_index()
+checkin = checkin[['date','dtime','departure']]
+checkin.head(5)
 
 checkout = df[df['Transaction']=='Check-out']
-checkout = checkout.rename(columns={'Check-out':'time','Amount':'cost','Destination':'arrival','Date':'date'}).reset_index()
-checkout = checkout[['date','time','arrival','cost']]
-checkout['type']='checkout'
-#checkout.head(5)
+checkout = checkout.rename(columns={'Check-out':'atime','Amount':'cost','Destination':'arrival','Date':'date'}).reset_index()
+checkout = checkout[['date','atime','arrival','cost']]
 
-cleaned = pd.DataFrame(columns=['type','date','time','departure','arrival','cost','duration','iswork'])
-#cleaned
+checkout.head(5)
+
+cleaned = pd.DataFrame(columns=['date','dtime','departure','atime','arrival','cost','duration','iswork'])
+cleaned
 
 cleaned = pd.concat( [cleaned,checkin] , ignore_index=False, sort=False)
-#cleaned.head(5)
+cleaned.head(5)
 
-cleaned.sort_values(by=['date','time'],ascending=[True,False],inplace=True)
-checkout.sort_values(by=['date','time'],ascending=[True,True],inplace=True)
+cleaned.sort_values(by=['date','dtime'],ascending=[True,True],inplace=True)
+checkout.sort_values(by=['date','atime'],ascending=[True,True],inplace=True)
+#print(cleaned.head(5))
+#print(checkout.head(3))
+
 for i,r in checkout.iterrows():
-    print(i)
-    print(r)
-    print('r - date - '+r['date'])
-    print(cleaned.loc(['date']==r['date'] and ['time']<r['time']))
+    print(cleaned['date'][i])
+    print(r['date'])
+    print(cleaned['dtime'][i])
+    print(r['atime'])
+    f = cleaned[(cleaned['date']==r['date']) & (cleaned['dtime']<cleaned['atime'])]
+    print(f)
     break
-#cleaned.head(4)
-#cleaned.loc(['date']==r['date'])
+cleaned.head(4)
+
