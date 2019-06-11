@@ -35,16 +35,26 @@ cleaned.head(5)
 
 cleaned.sort_values(by=['date','dtime'],ascending=[True,True],inplace=True)
 checkout.sort_values(by=['date','atime'],ascending=[True,True],inplace=True)
-#print(cleaned.head(5))
-#print(checkout.head(3))
 
 for i,r in checkout.iterrows():
-    print(cleaned['date'][i])
-    print(r['date'])
-    print(cleaned['dtime'][i])
-    print(r['atime'])
-    f = cleaned[(cleaned['date']==r['date']) & (cleaned['dtime']<cleaned['atime'])]
-    print(f)
-    break
-cleaned.head(4)
+    ind = -1
+    f = cleaned[cleaned['atime'].isnull()]
+    print('1',len(f))
+    #print(f.head(4))
+    if f is not None:
+        f = f[f['date']==r['date']]
+    print('2',len(f))
+    #print(f.head(4))
+    if f is not None:
+        f = f[f['dtime']<r['atime']]
+    print('3',len(f))
+    #print(f.head(4))
+    if f is not None:
+        ind = iloc(f)
+    print('4',f.head(4))
+    if ind>=0:
+        print(ind)
+        cleaned[ind]['atime','arrival','cost']=r['atime','arrival','cost']
+        break
 
++
